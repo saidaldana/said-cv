@@ -31,11 +31,14 @@ La identidad de Git para commits en **este** repo ya está configurada localment
 
 `git config user.email "tu@email.com"`
 
-## Vercel / v0 (“No package.json Found”)
+## Vercel / v0 (preview y deploy)
 
-Este repo es **solo HTML**; no usa Node para generar el sitio. Igual incluimos un **`package.json` mínimo** para que herramientas como v0 o Vercel reconozcan el proyecto.
+Este repo es **solo HTML**. El `package.json` incluye:
 
-En **Vercel** (importar desde GitHub): elige framework **Other**, sin comando de build, o deja que detecte el repo; el sitio sirve `index.html` desde la raíz.
+- **`npm run dev`** — sirve la carpeta en el puerto 3000 (v0 pide un script `dev` para la vista previa).
+- **`npm run build`** — no genera nada; solo termina bien para entornos que exigen un script `build`.
+
+En **Vercel** (importar desde GitHub): framework **Other** o **Vite** no aplica; si pide comando de build, usa `npm run build` o déjalo vacío si permite sitio estático desde la raíz (`index.html`).
 
 ## Ver en línea (GitHub Pages)
 
