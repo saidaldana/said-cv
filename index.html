@@ -30,11 +30,11 @@
   --t-pad: max(12px, env(safe-area-inset-top));
 }
 
-/* ── Screen: centered card ── */
+/* ── Mobile first: documento = un solo scroll nativo ── */
 html {
   background: #b0ab9f;
-  min-height: 100%;
-  min-height: -webkit-fill-available;
+  min-height: 0;
+  height: auto;
   overflow-x: hidden;
   scroll-padding-top: max(12px, env(safe-area-inset-top));
   -webkit-print-color-adjust: exact;
@@ -45,25 +45,22 @@ html {
 
 body {
   font-family: 'DM Sans', sans-serif;
-  display: flex;
-  justify-content: center;
-  align-items: flex-start;
-  min-height: 100vh;
-  min-height: -webkit-fill-available;
-  min-height: 100dvh;
-  min-height: 100svh;
+  display: block;
+  min-height: 0;
   padding:
     max(var(--cv-pad), var(--t-pad))
-    max(12px, var(--r-pad))
+    max(8px, var(--r-pad))
     max(var(--cv-pad), var(--b-pad))
-    max(12px, var(--l-pad));
+    max(8px, var(--l-pad));
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   overflow-x: hidden;
+  overflow-y: auto;
   width: 100%;
   text-rendering: optimizeLegibility;
   -webkit-tap-highlight-color: rgba(184, 150, 106, 0.25);
   overscroll-behavior-x: none;
+  overscroll-behavior-y: auto;
   font-feature-settings: "kern" 1, "liga" 1;
 }
 
@@ -104,17 +101,19 @@ body {
   outline-offset: 3px;
 }
 
+/* Tarjeta CV: columna única, mismo aspecto general que web */
 .cv {
   width: 100%;
   max-width: 816px;
   min-width: 0;
+  margin: 0 auto;
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
   flex-wrap: nowrap;
-  box-shadow: 0 24px 80px rgba(0,0,0,0.32);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.18);
   background: var(--white);
   overflow: hidden;
-  border-radius: 0;
+  border-radius: 12px;
 }
 
 a:focus-visible {
@@ -122,11 +121,6 @@ a:focus-visible {
   outline-offset: 3px;
 }
 
-a.contact-link {
-  color: inherit;
-  text-decoration: none;
-  touch-action: manipulation;
-}
 a.contact-link:hover {
   color: var(--navy);
   text-decoration: underline;
@@ -142,8 +136,8 @@ a.contact-link:hover {
 
 /* ══════════════════ SIDEBAR ══════════════════ */
 .sb {
-  width: var(--sw);
-  min-width: var(--sw);
+  width: 100%;
+  min-width: 0;
   max-width: 100%;
   background: var(--navy);
   position: relative;
@@ -153,7 +147,6 @@ a.contact-link:hover {
   print-color-adjust: exact;
 }
 
-/* diagonal texture */
 .sb::before {
   content: '';
   position: absolute; inset: 0;
@@ -165,7 +158,6 @@ a.contact-link:hover {
   pointer-events: none;
 }
 
-/* gold top stripe */
 .sb::after {
   content: '';
   position: absolute;
@@ -178,22 +170,24 @@ a.contact-link:hover {
 .sb-inner {
   position: relative;
   z-index: 1;
-  padding: clamp(28px, 5vw, 36px) clamp(18px, 3vw, 21px) clamp(26px, 4vw, 32px);
+  padding: clamp(22px, 5vw, 32px) clamp(16px, 4vw, 21px) max(22px, env(safe-area-inset-bottom));
+  padding-left: max(16px, env(safe-area-inset-left));
+  padding-right: max(16px, env(safe-area-inset-right));
   display: flex;
   flex-direction: column;
+  max-width: 100%;
 }
 
-/* ── Photo ── */
 .photo-wrap {
   display: flex;
   justify-content: center;
   margin-bottom: clamp(18px, 3vw, 22px);
-  margin-top: 6px;
+  margin-top: max(4px, env(safe-area-inset-top));
 }
 
 .photo-ring {
-  width: clamp(104px, 28vw, 118px);
-  height: clamp(104px, 28vw, 118px);
+  width: min(128px, 38vmin);
+  height: min(128px, 38vmin);
   aspect-ratio: 1;
   border-radius: 50%;
   padding: 3px;
@@ -220,11 +214,10 @@ a.contact-link:hover {
   backface-visibility: hidden;
 }
 
-/* ── Sidebar label (matches hierarchy: same rhythm as main .sc) ── */
 .sl {
-  font-size: clamp(7px, 0.18vw + 6.4px, 8px);
+  font-size: clamp(0.65rem, 2.5vmin, 0.72rem);
   font-weight: 500;
-  letter-spacing: 0.26em;
+  letter-spacing: 0.16em;
   color: var(--gold);
   text-transform: uppercase;
   margin-top: clamp(16px, 3vw, 20px);
@@ -235,7 +228,6 @@ a.contact-link:hover {
 }
 .sl:first-of-type { margin-top: 0; }
 
-/* ── Achievement cards ── */
 .ach {
   background: rgba(255,255,255,0.06);
   border: 1px solid rgba(184,150,106,0.15);
@@ -248,7 +240,7 @@ a.contact-link:hover {
 }
 
 .ach-t {
-  font-size: clamp(7.5px, 0.2vw + 6.8px, 8.5px);
+  font-size: clamp(0.65rem, 2.5vmin, 0.72rem);
   font-weight: 500;
   letter-spacing: 0.1em;
   color: var(--gold2);
@@ -257,18 +249,17 @@ a.contact-link:hover {
 }
 
 .ach-d {
-  font-size: clamp(9px, 0.28vw + 8px, 10px);
+  font-size: clamp(0.8rem, 3.1vmin, 0.88rem);
   font-weight: 300;
   color: rgba(255,255,255,0.78);
   line-height: 1.55;
 }
 
-/* ── Skill rows ── */
 .si {
-  font-size: clamp(9.5px, 0.3vw + 8.5px, 10.5px);
+  font-size: clamp(0.82rem, 3.1vmin, 0.9rem);
   font-weight: 300;
   color: rgba(255,255,255,0.82);
-  padding: 4.5px 0;
+  padding: 7px 0;
   border-bottom: 1px solid rgba(255,255,255,0.08);
   display: flex; align-items: center; gap: 8px;
   line-height: 1.35;
@@ -282,9 +273,9 @@ a.contact-link:hover {
 }
 .si.plain { padding: 3px 0; border-bottom: none; }
 .si.plain::before { display: none; }
-.si.dim { color: rgba(255,255,255,0.4); font-size: clamp(8.5px, 0.25vw + 7.8px, 9px); border-bottom: none; padding: 2px 0; }
+.si.dim { color: rgba(255,255,255,0.4); font-size: clamp(0.78rem, 2.9vmin, 0.85rem); border-bottom: none; padding: 2px 0; }
 .si.dim::before { display: none; }
-.si.accent { color: var(--gold2); font-size: clamp(8.5px, 0.25vw + 7.8px, 9px); border-bottom: none; padding: 2px 0; }
+.si.accent { color: var(--gold2); font-size: clamp(0.78rem, 2.9vmin, 0.85rem); border-bottom: none; padding: 2px 0; }
 .si.accent::before { display: none; }
 
 /* ══════════════════ MAIN ══════════════════ */
@@ -295,7 +286,6 @@ a.contact-link:hover {
   position: relative;
 }
 
-/* gold top stripe */
 .mn::before {
   content: '';
   position: absolute;
@@ -305,28 +295,36 @@ a.contact-link:hover {
 }
 
 .mn-inner {
-  padding: clamp(24px, 4vw, 34px) clamp(22px, 4vw, 36px) clamp(26px, 4vw, 32px) clamp(24px, 4vw, 32px);
+  padding:
+    max(22px, env(safe-area-inset-top))
+    max(16px, env(safe-area-inset-right))
+    max(28px, env(safe-area-inset-bottom))
+    max(16px, env(safe-area-inset-left));
   min-width: 0;
   overflow-wrap: anywhere;
   word-wrap: break-word;
 }
 
-/* ── Name block ── */
 h1.nm,
 .nm {
   font-family: 'Playfair Display', serif;
-  font-size: clamp(1.125rem, 0.9vw + 0.85rem, 1.625rem);
+  font-size: clamp(1.125rem, 5.2vmin, 1.625rem);
   font-weight: 900;
   color: var(--ink);
   letter-spacing: 0.02em;
   text-transform: uppercase;
-  line-height: 1.08;
+  line-height: 1.15;
   margin: 0 0 5px;
-  white-space: nowrap;
+  white-space: normal;
+  word-wrap: break-word;
+  overflow-wrap: anywhere;
+  hyphens: auto;
 }
 
 .rl {
-  display: flex; align-items: center;
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
   gap: 10px;
   padding-bottom: 12px;
   margin-bottom: 13px;
@@ -334,37 +332,38 @@ h1.nm,
 }
 
 .rl-txt {
-  font-size: clamp(9px, 0.38vw + 7px, 11px);
+  font-size: clamp(0.65rem, 2.9vmin, 0.7rem);
   font-weight: 500;
-  letter-spacing: 0.22em;
+  letter-spacing: 0.1em;
   color: var(--gold);
   text-transform: uppercase;
-  white-space: nowrap;
+  white-space: normal;
+  line-height: 1.5;
 }
 
-/* ── Summary ── */
 .summary {
-  font-size: clamp(10px, 0.32vw + 8.5px, 11px);
+  font-size: clamp(0.8rem, 3.4vmin, 0.95rem);
   font-weight: 300;
   font-style: italic;
   color: var(--muted);
-  line-height: 1.82;
+  line-height: 1.75;
   margin: 0 0 11px;
   padding-left: 12px;
   border-left: 2px solid var(--gold);
-  max-width: min(65ch, 100%);
+  max-width: none;
 }
 
-/* ── Contact bar ── */
 .contact {
-  display: flex; align-items: center;
+  display: flex;
+  align-items: center;
   flex-wrap: wrap;
-  gap: 6px 10px;
-  font-size: clamp(9px, 0.28vw + 8px, 10.5px);
+  gap: 8px 12px;
+  font-size: clamp(0.8rem, 3.1vmin, 0.9rem);
   font-weight: 500;
+  line-height: 1.5;
   color: var(--ink);
   margin-bottom: 18px;
-  padding: 7px 12px;
+  padding: 12px 14px;
   background: var(--cream);
   border-left: 2px solid var(--gold);
   word-break: break-word;
@@ -373,12 +372,11 @@ h1.nm,
 
 .contact-sep { margin: 0 4px; color: var(--gold); flex-shrink: 0; }
 
-/* ── Section title (una sola línea; sin border + ::after superpuestos) ── */
 h2.sc,
 .sc {
-  font-size: clamp(7.5px, 0.22vw + 6.5px, 8.5px);
+  font-size: clamp(0.65rem, 2.6vmin, 0.75rem);
   font-weight: 500;
-  letter-spacing: 0.24em;
+  letter-spacing: 0.16em;
   color: var(--navy);
   text-transform: uppercase;
   margin: clamp(16px, 3vw, 18px) 0 clamp(10px, 2vw, 12px);
@@ -387,7 +385,6 @@ h2.sc,
   line-height: 1.3;
 }
 
-/* ── Job entries ── */
 .job {
   margin-bottom: 13px;
   padding-bottom: 13px;
@@ -396,44 +393,48 @@ h2.sc,
 .job:last-of-type { border-bottom: none; margin-bottom: 0; }
 
 .jh {
-  display: flex; justify-content: space-between;
-  align-items: baseline; gap: 8px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 6px;
   margin-bottom: 2px;
 }
 
 .jt {
-  font-size: clamp(10px, 0.42vw + 8px, 12px);
+  font-size: clamp(0.85rem, 3.6vmin, 0.95rem);
   font-weight: 500;
   color: var(--ink);
-  line-height: 1.28;
+  line-height: 1.35;
   flex: 1;
+  width: 100%;
 }
 
 .jd {
-  font-size: clamp(8px, 0.22vw + 7px, 9px);
+  font-size: clamp(0.75rem, 3vmin, 0.85rem);
   font-weight: 300;
   color: var(--muted);
-  white-space: nowrap;
+  white-space: normal;
   flex-shrink: 0;
   font-style: italic;
 }
 
 .jc {
-  font-size: clamp(7.5px, 0.2vw + 6.5px, 8.5px);
+  font-size: clamp(0.68rem, 2.7vmin, 0.75rem);
   font-weight: 500;
   color: var(--gold);
   letter-spacing: 0.06em;
   text-transform: uppercase;
   margin-bottom: 5px;
+  line-height: 1.35;
 }
 
 .job ul { list-style: none; }
 
 .job ul li {
-  font-size: clamp(9px, 0.32vw + 7.5px, 10.5px);
+  font-size: clamp(0.82rem, 3.3vmin, 0.92rem);
   font-weight: 300;
   color: var(--text);
-  line-height: 1.68;
+  line-height: 1.65;
   padding-left: 13px;
   position: relative;
   margin-bottom: 3px;
@@ -448,169 +449,28 @@ h2.sc,
   border: 1px solid var(--gold);
 }
 
-/* ── Education (aligned with .job + .ach patterns) ── */
 .job.edu-job { margin-bottom: 0; padding-bottom: 0; border-bottom: none; }
 .job.edu-job .jc { margin-bottom: 0; }
 
-/* ══════════════════ DESKTOP ≥961px (legibilidad + alta resolución) ══════════════════ */
-@media (min-width: 961px) {
-  .cv {
-    border-radius: 2px;
-    box-shadow:
-      0 20px 60px rgba(0, 0, 0, 0.28),
-      0 1px 0 rgba(255, 255, 255, 0.06) inset;
-  }
-  .mn-inner {
-    padding-left: clamp(26px, 2.5vw, 40px);
-    padding-right: clamp(26px, 2.5vw, 42px);
-  }
-  .sb-inner {
-    padding-left: clamp(18px, 2vw, 22px);
-    padding-right: clamp(18px, 2vw, 22px);
-  }
+a.contact-link {
+  color: inherit;
+  text-decoration: none;
+  touch-action: manipulation;
+  min-height: 44px;
+  padding: 8px 4px;
+  margin: -8px -4px;
+  display: inline-flex;
+  align-items: center;
+  border-radius: 4px;
 }
 
-/* ══════════════════ RESPONSIVE (móvil, tablet, Android, iPhone) ══════════════════ */
-@media (max-width: 960px) {
-  /* Una sola columna de documento: sin “caja” de 100vh que parezca otra pantalla */
-  html {
-    min-height: 0;
-    height: auto;
-  }
-  body {
-    display: block;
-    min-height: 0;
-    align-items: unset;
-  }
-  .cv {
-    flex-direction: column;
-    flex-wrap: nowrap;
-    max-width: 100%;
-    margin: 0 auto;
-    border-radius: 12px;
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.18);
-    overflow: hidden;
-    background: var(--white);
-  }
-  .sb {
-    width: 100%;
-    min-width: 0;
-    max-width: 100%;
-    background: var(--navy);
-  }
-  .sb-inner {
-    max-width: 100%;
-    padding-left: max(16px, env(safe-area-inset-left));
-    padding-right: max(16px, env(safe-area-inset-right));
-    padding-bottom: max(22px, env(safe-area-inset-bottom));
-  }
-  .mn-inner {
-    padding:
-      max(22px, env(safe-area-inset-top))
-      max(16px, env(safe-area-inset-right))
-      max(28px, env(safe-area-inset-bottom))
-      max(16px, env(safe-area-inset-left));
-  }
-  .photo-wrap {
-    margin-top: max(4px, env(safe-area-inset-top));
-  }
-  .photo-ring {
-    width: min(128px, 38vmin);
-    height: min(128px, 38vmin);
-  }
-  h1.nm,
-  .nm {
-    white-space: normal;
-    line-height: 1.15;
-    word-wrap: break-word;
-    overflow-wrap: anywhere;
-    hyphens: auto;
-    font-size: clamp(1.125rem, 5.2vmin, 1.625rem);
-  }
-  .rl {
-    flex-wrap: wrap;
-  }
-  .rl-txt {
-    white-space: normal;
-    line-height: 1.5;
-    letter-spacing: 0.1em;
-    font-size: clamp(0.65rem, 2.9vmin, 0.7rem);
-  }
-  .summary {
-    max-width: none;
-    font-size: clamp(0.8rem, 3.4vmin, 0.95rem);
-    line-height: 1.75;
-  }
-  .contact {
-    font-size: clamp(0.8rem, 3.1vmin, 0.9rem);
-    line-height: 1.5;
-    padding: 12px 14px;
-    gap: 8px 12px;
-  }
-  a.contact-link {
-    min-height: 44px;
-    padding: 8px 4px;
-    margin: -8px -4px;
-    display: inline-flex;
-    align-items: center;
-    border-radius: 4px;
-  }
-  h2.sc,
-  .sc {
-    letter-spacing: 0.16em;
-    font-size: clamp(0.65rem, 2.6vmin, 0.75rem);
-  }
-  .jh {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 6px;
-  }
-  .jt {
-    font-size: clamp(0.85rem, 3.6vmin, 0.95rem);
-    width: 100%;
-    line-height: 1.35;
-  }
-  .jd {
-    white-space: normal;
-    font-size: clamp(0.75rem, 3vmin, 0.85rem);
-  }
-  .jc {
-    font-size: clamp(0.68rem, 2.7vmin, 0.75rem);
-    line-height: 1.35;
-  }
-  .job ul li {
-    font-size: clamp(0.82rem, 3.3vmin, 0.92rem);
-    line-height: 1.65;
-  }
-  .sl {
-    letter-spacing: 0.16em;
-    font-size: clamp(0.65rem, 2.5vmin, 0.72rem);
-  }
-  .ach-t {
-    font-size: clamp(0.65rem, 2.5vmin, 0.72rem);
-  }
-  .ach-d {
-    font-size: clamp(0.8rem, 3.1vmin, 0.88rem);
-  }
-  .si {
-    font-size: clamp(0.82rem, 3.1vmin, 0.9rem);
-    padding: 7px 0;
-    align-items: center;
-  }
-  .si.dim,
-  .si.accent {
-    font-size: clamp(0.78rem, 2.9vmin, 0.85rem);
-  }
-}
-
+/* Teléfonos muy estrechos: contacto en columna */
 @media (max-width: 420px) {
   body {
     padding-left: max(8px, env(safe-area-inset-left));
     padding-right: max(8px, env(safe-area-inset-right));
   }
-  .contact .contact-sep {
-    display: none;
-  }
+  .contact .contact-sep { display: none; }
   .contact {
     flex-direction: column;
     align-items: stretch;
@@ -626,6 +486,171 @@ h2.sc,
   }
 }
 
+/* Un poco más de aire horizontal en móvil “normal” */
+@media (min-width: 421px) {
+  body {
+    padding-left: max(12px, env(safe-area-inset-left));
+    padding-right: max(12px, env(safe-area-inset-right));
+  }
+}
+
+/* ══════════════════ TABLET / DESKTOP ≥961px (misma apariencia que layout web) ══════════════════ */
+@media (min-width: 961px) {
+  html {
+    min-height: 100%;
+    min-height: -webkit-fill-available;
+  }
+
+  body {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    min-height: 100vh;
+    min-height: -webkit-fill-available;
+    min-height: 100dvh;
+    min-height: 100svh;
+    padding:
+      max(var(--cv-pad), var(--t-pad))
+      max(12px, var(--r-pad))
+      max(var(--cv-pad), var(--b-pad))
+      max(12px, var(--l-pad));
+  }
+
+  .cv {
+    flex-direction: row;
+    flex-wrap: nowrap;
+    margin: 0;
+    border-radius: 2px;
+    box-shadow:
+      0 20px 60px rgba(0, 0, 0, 0.28),
+      0 1px 0 rgba(255, 255, 255, 0.06) inset;
+  }
+
+  .sb {
+    width: var(--sw);
+    min-width: var(--sw);
+    max-width: 100%;
+  }
+
+  .sb-inner {
+    padding: clamp(28px, 5vw, 36px) clamp(18px, 3vw, 21px) clamp(26px, 4vw, 32px);
+    padding-left: clamp(18px, 2vw, 22px);
+    padding-right: clamp(18px, 2vw, 22px);
+  }
+
+  .photo-wrap {
+    margin-top: 6px;
+  }
+
+  .photo-ring {
+    width: clamp(104px, 28vw, 118px);
+    height: clamp(104px, 28vw, 118px);
+  }
+
+  .sl {
+    font-size: clamp(7px, 0.18vw + 6.4px, 8px);
+    letter-spacing: 0.26em;
+  }
+
+  .ach-t {
+    font-size: clamp(7.5px, 0.2vw + 6.8px, 8.5px);
+  }
+
+  .ach-d {
+    font-size: clamp(9px, 0.28vw + 8px, 10px);
+  }
+
+  .si {
+    font-size: clamp(9.5px, 0.3vw + 8.5px, 10.5px);
+    padding: 4.5px 0;
+  }
+  .si.dim { font-size: clamp(8.5px, 0.25vw + 7.8px, 9px); }
+  .si.accent { font-size: clamp(8.5px, 0.25vw + 7.8px, 9px); }
+
+  .mn-inner {
+    padding: clamp(24px, 4vw, 34px) clamp(22px, 4vw, 36px) clamp(26px, 4vw, 32px) clamp(24px, 4vw, 32px);
+    padding-left: clamp(26px, 2.5vw, 40px);
+    padding-right: clamp(26px, 2.5vw, 42px);
+  }
+
+  h1.nm,
+  .nm {
+    font-size: clamp(1.125rem, 0.9vw + 0.85rem, 1.625rem);
+    line-height: 1;
+    white-space: nowrap;
+    hyphens: manual;
+    overflow-wrap: normal;
+    word-wrap: normal;
+  }
+
+  .rl {
+    flex-wrap: nowrap;
+  }
+
+  .rl-txt {
+    font-size: clamp(9px, 0.38vw + 7px, 11px);
+    letter-spacing: 0.22em;
+    white-space: nowrap;
+  }
+
+  .summary {
+    font-size: clamp(10px, 0.32vw + 8.5px, 11px);
+    line-height: 1.82;
+    max-width: min(65ch, 100%);
+  }
+
+  .contact {
+    flex-direction: row;
+    align-items: center;
+    font-size: clamp(9px, 0.28vw + 8px, 10.5px);
+    line-height: normal;
+    padding: 7px 12px;
+    gap: 6px 10px;
+  }
+
+  a.contact-link {
+    min-height: 0;
+    min-width: 0;
+    padding: 0;
+    margin: 0;
+    display: inline;
+    border-radius: 0;
+  }
+
+  h2.sc,
+  .sc {
+    font-size: clamp(7.5px, 0.22vw + 6.5px, 8.5px);
+    letter-spacing: 0.24em;
+  }
+
+  .jh {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 8px;
+  }
+
+  .jt {
+    font-size: clamp(10px, 0.42vw + 8px, 12px);
+    line-height: 1.28;
+    width: auto;
+  }
+
+  .jd {
+    font-size: clamp(8px, 0.22vw + 7px, 9px);
+    white-space: nowrap;
+  }
+
+  .jc {
+    font-size: clamp(7.5px, 0.2vw + 6.5px, 8.5px);
+  }
+
+  .job ul li {
+    font-size: clamp(9px, 0.32vw + 7.5px, 10.5px);
+    line-height: 1.68;
+  }
+}
+
 /* ══════════════════ PRINT ══════════════════ */
 @page {
   size: letter;
@@ -633,7 +658,7 @@ h2.sc,
 }
 
 @media print {
-  html { background: white; }
+  html { background: white; min-height: 0; }
   body { padding: 0; background: white; min-height: 0; }
   .skip-link { display: none !important; }
   .cv {
