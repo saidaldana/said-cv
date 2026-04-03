@@ -30,17 +30,16 @@
   --t-pad: max(12px, env(safe-area-inset-top));
 }
 
-/* ── Mobile first: documento = un solo scroll nativo ── */
+/* ── Mobile first: documento con scroll y zoom nativos ── */
 html {
   background: #b0ab9f;
   min-height: 0;
   height: auto;
-  overflow-x: hidden;
+  overflow: auto;
   scroll-padding-top: max(12px, env(safe-area-inset-top));
   -webkit-print-color-adjust: exact;
   print-color-adjust: exact;
-  text-size-adjust: 100%;
-  -webkit-text-size-adjust: 100%;
+  /* Don't restrict text size adjustment - allow browser zoom */
 }
 
 body {
@@ -54,14 +53,15 @@ body {
     max(8px, var(--l-pad));
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  overflow-x: hidden;
+  overflow-x: auto;
   overflow-y: auto;
   width: 100%;
   text-rendering: optimizeLegibility;
   -webkit-tap-highlight-color: rgba(184, 150, 106, 0.25);
-  overscroll-behavior-x: none;
-  overscroll-behavior-y: auto;
+  overscroll-behavior: auto;
   font-feature-settings: "kern" 1, "liga" 1;
+  /* Allow all native gestures - zoom, pan, scroll */
+  touch-action: auto;
 }
 
 @media (prefers-reduced-motion: no-preference) {
@@ -777,9 +777,10 @@ a.contact-link {
   align-items: center;
   justify-content: center;
   box-shadow: 0 4px 16px rgba(0, 0, 0, 0.25), 0 2px 4px rgba(0, 0, 0, 0.1);
-  transition: transform 0.2s ease, background 0.2s ease, box-shadow 0.2s ease;
+  transition: transform 0.15s ease, background 0.15s ease, box-shadow 0.15s ease;
   touch-action: manipulation;
   -webkit-tap-highlight-color: transparent;
+  user-select: none;
 }
 
 .cv-btn:hover {
@@ -817,29 +818,7 @@ a.contact-link {
   color: var(--white);
 }
 
-/* Zoom indicator */
-.zoom-indicator {
-  position: fixed;
-  bottom: max(88px, calc(env(safe-area-inset-bottom, 20px) + 68px));
-  right: max(16px, env(safe-area-inset-right, 16px));
-  background: rgba(21, 40, 64, 0.92);
-  color: var(--white);
-  padding: 6px 12px;
-  border-radius: 16px;
-  font-size: 12px;
-  font-weight: 500;
-  letter-spacing: 0.02em;
-  opacity: 0;
-  transform: translateY(10px);
-  transition: opacity 0.2s ease, transform 0.2s ease;
-  pointer-events: none;
-  z-index: 999;
-}
 
-.zoom-indicator.visible {
-  opacity: 1;
-  transform: translateY(0);
-}
 
 /* Section nav for quick jumping */
 .cv-nav {
@@ -904,15 +883,15 @@ a.contact-link {
   opacity: 1;
 }
 
-/* Mobile: hide nav dots on very small screens, show compact controls */
-@media (max-width: 420px) {
+/* Mobile: compact controls centered at bottom */
+@media (max-width: 600px) {
   .cv-nav {
     display: none;
   }
   
   .cv-controls {
     flex-direction: row;
-    bottom: max(12px, env(safe-area-inset-bottom, 12px));
+    bottom: max(16px, env(safe-area-inset-bottom, 16px));
     right: 50%;
     transform: translateX(50%) translateY(20px);
   }
@@ -928,32 +907,26 @@ a.contact-link {
     width: 44px;
     height: 44px;
   }
-  
-  .zoom-indicator {
-    bottom: max(72px, calc(env(safe-area-inset-bottom, 12px) + 60px));
-    right: 50%;
-    transform: translateX(50%) translateY(10px);
-  }
-  
-  .zoom-indicator.visible {
-    transform: translateX(50%) translateY(0);
-  }
 }
 
-/* Fit-to-view mode */
+/* Fit-to-view mode - scales CV to fit viewport while keeping native interactions */
 body.fit-view {
-  overflow: hidden;
+  overflow: auto;
   display: flex;
   justify-content: center;
-  align-items: center;
-  height: 100vh;
-  height: 100dvh;
-  padding: 0;
+  align-items: flex-start;
+  min-height: 100vh;
+  min-height: 100dvh;
+  padding: 16px;
+  touch-action: auto;
 }
 
 body.fit-view .cv {
-  transform-origin: center center;
-  transition: transform 0.3s ease;
+  transform-origin: top center;
+  transition: transform 0.25s ease;
+  flex-shrink: 0;
+  /* Native interactions still work on scaled element */
+  touch-action: auto;
 }
 
 /* Double-tap hint */
@@ -985,9 +958,10 @@ body.fit-view .cv {
   color: var(--gold);
 }
 
-/* Smooth scrolling enhancement */
+/* CV should not block any native interactions */
 .cv {
-  scroll-behavior: smooth;
+  touch-action: auto;
+  user-select: auto;
 }
 
 /* Highlight section on navigation */
@@ -1195,27 +1169,17 @@ body.fit-view .cv {
 
 </div>
 
-<!-- CV Viewer Controls -->
+<!-- CV Viewer Controls - minimal, non-intrusive -->
 <div class="cv-controls" id="cvControls">
-  <button class="cv-btn fit-btn" id="fitBtn" aria-label="Ajustar CV a pantalla" title="Vista completa">
+  <button class="cv-btn fit-btn" id="fitBtn" aria-label="Ver CV completo" title="Ver CV completo (F)">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
       <path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"/>
     </svg>
   </button>
-  <button class="cv-btn" id="zoomInBtn" aria-label="Acercar" title="Acercar">
+  <button class="cv-btn" id="resetBtn" aria-label="Ir al inicio" title="Ir al inicio">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-      <circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35M11 8v6M8 11h6"/>
-    </svg>
-  </button>
-  <button class="cv-btn" id="zoomOutBtn" aria-label="Alejar" title="Alejar">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-      <circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35M8 11h6"/>
-    </svg>
-  </button>
-  <button class="cv-btn" id="resetBtn" aria-label="Restablecer zoom" title="Restablecer (100%)">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-      <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/>
-      <path d="M3 3v5h5"/>
+      <path d="m18 15-6-6-6 6"/>
+      <path d="M12 9v12"/>
     </svg>
   </button>
 </div>
@@ -1228,12 +1192,11 @@ body.fit-view .cv {
   <div class="nav-dot" data-target="education" data-label="Educacion" role="button" tabindex="0"></div>
 </nav>
 
-<!-- Zoom Indicator -->
-<div class="zoom-indicator" id="zoomIndicator">100%</div>
+
 
 <!-- First Visit Hint -->
 <div class="tap-hint" id="tapHint">
-  <strong>Tip:</strong> Usa los controles para hacer zoom o <strong>doble tap</strong> para ajustar el CV a tu pantalla
+  <strong>Tip:</strong> Usa pinch o scroll del mouse para hacer zoom. El boton dorado muestra el CV completo.
 </div>
 
 <script>
@@ -1244,19 +1207,13 @@ body.fit-view .cv {
   const cv = document.querySelector('.cv');
   const body = document.body;
   const fitBtn = document.getElementById('fitBtn');
-  const zoomInBtn = document.getElementById('zoomInBtn');
-  const zoomOutBtn = document.getElementById('zoomOutBtn');
   const resetBtn = document.getElementById('resetBtn');
-  const zoomIndicator = document.getElementById('zoomIndicator');
   const navDots = document.querySelectorAll('.nav-dot');
   const tapHint = document.getElementById('tapHint');
   
   // State
-  let currentZoom = 1;
   let isFitView = false;
-  let zoomTimeout = null;
-  let lastTap = 0;
-  const HINT_SHOWN_KEY = 'cv_hint_shown';
+  const HINT_SHOWN_KEY = 'cv_hint_shown_v2';
   
   // Show hint on first visit (mobile only)
   function showFirstVisitHint() {
@@ -1272,117 +1229,60 @@ body.fit-view .cv {
     }, 1500);
   }
   
-  // Update zoom indicator
-  function showZoomIndicator(zoom) {
-    const percent = Math.round(zoom * 100);
-    zoomIndicator.textContent = percent + '%';
-    zoomIndicator.classList.add('visible');
-    
-    clearTimeout(zoomTimeout);
-    zoomTimeout = setTimeout(() => {
-      zoomIndicator.classList.remove('visible');
-    }, 1500);
-  }
-  
-  // Calculate fit scale
+  // Calculate fit scale to show entire CV
   function calculateFitScale() {
     const vw = window.innerWidth;
     const vh = window.innerHeight;
-    const cvRect = cv.getBoundingClientRect();
-    const cvW = cv.scrollWidth / currentZoom;
-    const cvH = cv.scrollHeight / currentZoom;
+    const cvW = cv.offsetWidth;
+    const cvH = cv.offsetHeight;
     
-    const padding = window.innerWidth < 420 ? 16 : 32;
+    const padding = 32;
     const scaleX = (vw - padding) / cvW;
     const scaleY = (vh - padding) / cvH;
     
     return Math.min(scaleX, scaleY, 1);
   }
   
-  // Apply zoom
-  function applyZoom(zoom, smooth = true) {
-    currentZoom = Math.max(0.25, Math.min(5, zoom));
-    
-    if (smooth) {
-      cv.style.transition = 'transform 0.3s ease';
-    } else {
-      cv.style.transition = 'none';
-    }
-    
-    if (isFitView) {
-      const fitScale = calculateFitScale();
-      cv.style.transform = `scale(${fitScale})`;
-      showZoomIndicator(fitScale);
-    } else {
-      cv.style.transform = currentZoom === 1 ? '' : `scale(${currentZoom})`;
-      showZoomIndicator(currentZoom);
-    }
-    
-    // Reset transition
-    if (!smooth) {
-      requestAnimationFrame(() => {
-        cv.style.transition = '';
-      });
-    }
-  }
-  
-  // Toggle fit view
+  // Toggle fit view - scale CV to fit viewport
   function toggleFitView() {
     isFitView = !isFitView;
     fitBtn.classList.toggle('active', isFitView);
     body.classList.toggle('fit-view', isFitView);
     
     if (isFitView) {
+      const scale = calculateFitScale();
+      cv.style.transform = `scale(${scale})`;
+      cv.style.transformOrigin = 'top center';
+      
       fitBtn.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
         <path d="M4 14h6m0 0v6m0-6-7 7m17-11h-6m0 0V4m0 6 7-7"/>
       </svg>`;
       fitBtn.setAttribute('aria-label', 'Salir de vista completa');
-      applyZoom(currentZoom);
+      fitBtn.setAttribute('title', 'Vista normal');
+      
+      // Scroll to top for best view
+      window.scrollTo({ top: 0, behavior: 'smooth' });
     } else {
+      cv.style.transform = '';
+      cv.style.transformOrigin = '';
+      
       fitBtn.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
         <path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"/>
       </svg>`;
-      fitBtn.setAttribute('aria-label', 'Ajustar CV a pantalla');
-      cv.style.transform = '';
-      currentZoom = 1;
-      showZoomIndicator(1);
+      fitBtn.setAttribute('aria-label', 'Ver CV completo');
+      fitBtn.setAttribute('title', 'Ver CV completo');
     }
   }
   
-  // Zoom controls
+  // Controls
   fitBtn.addEventListener('click', toggleFitView);
-  
-  zoomInBtn.addEventListener('click', () => {
-    if (isFitView) toggleFitView();
-    applyZoom(currentZoom * 1.25);
-  });
-  
-  zoomOutBtn.addEventListener('click', () => {
-    if (isFitView) toggleFitView();
-    applyZoom(currentZoom / 1.25);
-  });
   
   resetBtn.addEventListener('click', () => {
     if (isFitView) toggleFitView();
-    currentZoom = 1;
-    cv.style.transform = '';
-    showZoomIndicator(1);
     window.scrollTo({ top: 0, behavior: 'smooth' });
   });
   
-  // Double tap to toggle fit view (mobile)
-  cv.addEventListener('touchend', (e) => {
-    const now = Date.now();
-    const DOUBLE_TAP_DELAY = 300;
-    
-    if (now - lastTap < DOUBLE_TAP_DELAY) {
-      e.preventDefault();
-      toggleFitView();
-    }
-    lastTap = now;
-  });
-  
-  // Navigation dots
+  // Navigation dots - quick jump to sections
   navDots.forEach(dot => {
     const handleNav = () => {
       const targetId = dot.dataset.target;
@@ -1415,6 +1315,8 @@ body.fit-view .cv {
   
   // Update nav dots on scroll
   function updateActiveNav() {
+    if (isFitView) return; // Don't update in fit view
+    
     const sections = ['education', 'experience', 'summary', 'top'];
     const scrollY = window.scrollY + window.innerHeight / 3;
     
@@ -1439,44 +1341,30 @@ body.fit-view .cv {
       });
       scrollTicking = true;
     }
-  });
+  }, { passive: true });
   
   // Handle window resize for fit view
   window.addEventListener('resize', () => {
     if (isFitView) {
-      applyZoom(currentZoom, false);
+      const scale = calculateFitScale();
+      cv.style.transition = 'none';
+      cv.style.transform = `scale(${scale})`;
+      requestAnimationFrame(() => {
+        cv.style.transition = '';
+      });
     }
-  });
+  }, { passive: true });
   
-  // Keyboard shortcuts
+  // Keyboard shortcut - only F for fit toggle, let browser handle zoom
   document.addEventListener('keydown', (e) => {
-    // Ignore if typing in an input
     if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
     
-    switch(e.key) {
-      case '+':
-      case '=':
-        e.preventDefault();
-        if (isFitView) toggleFitView();
-        applyZoom(currentZoom * 1.25);
-        break;
-      case '-':
-        e.preventDefault();
-        if (isFitView) toggleFitView();
-        applyZoom(currentZoom / 1.25);
-        break;
-      case '0':
-        e.preventDefault();
-        if (isFitView) toggleFitView();
-        currentZoom = 1;
-        cv.style.transform = '';
-        showZoomIndicator(1);
-        break;
-      case 'f':
-      case 'F':
+    if (e.key === 'f' || e.key === 'F') {
+      // Only if not using Ctrl/Cmd (browser find)
+      if (!e.ctrlKey && !e.metaKey) {
         e.preventDefault();
         toggleFitView();
-        break;
+      }
     }
   });
   
