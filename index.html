@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#152840">
 <meta name="color-scheme" content="light">
 <title>Said Rodrigo Aldana Sánchez — Senior Product Manager</title>
@@ -23,15 +23,18 @@
   --muted:  #6b7a8d;
   --border: #e2ddd6;
   --sw:     clamp(220px, 31.5vw, 258px);
-  --cv-pad: clamp(16px, 4vw, 36px);
-  --r-pad: max(16px, env(safe-area-inset-right));
-  --l-pad: max(16px, env(safe-area-inset-left));
+  --cv-pad: clamp(12px, 4vw, 36px);
+  --r-pad: max(12px, env(safe-area-inset-right));
+  --l-pad: max(12px, env(safe-area-inset-left));
+  --b-pad: max(12px, env(safe-area-inset-bottom));
+  --t-pad: max(12px, env(safe-area-inset-top));
 }
 
 /* ── Screen: centered card ── */
 html {
   background: #b0ab9f;
   min-height: 100%;
+  overflow-x: hidden;
   -webkit-print-color-adjust: exact;
   print-color-adjust: exact;
   text-size-adjust: 100%;
@@ -45,14 +48,22 @@ body {
   align-items: flex-start;
   min-height: 100vh;
   min-height: 100dvh;
-  padding: var(--cv-pad) max(20px, var(--r-pad)) var(--cv-pad) max(20px, var(--l-pad));
+  min-height: 100svh;
+  padding:
+    max(var(--cv-pad), var(--t-pad))
+    max(12px, var(--r-pad))
+    max(var(--cv-pad), var(--b-pad))
+    max(12px, var(--l-pad));
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden;
+  width: 100%;
 }
 
 .cv {
   width: 100%;
   max-width: 816px;
+  min-width: 0;
   display: flex;
   flex-direction: row;
   flex-wrap: nowrap;
@@ -88,6 +99,7 @@ a.contact-link:hover {
 .sb {
   width: var(--sw);
   min-width: var(--sw);
+  max-width: 100%;
   background: var(--navy);
   position: relative;
   display: flex;
@@ -231,6 +243,7 @@ a.contact-link:hover {
 /* ══════════════════ MAIN ══════════════════ */
 .mn {
   flex: 1;
+  min-width: 0;
   background: var(--white);
   position: relative;
 }
@@ -294,15 +307,19 @@ h1.nm,
 /* ── Contact bar ── */
 .contact {
   display: flex; align-items: center;
+  flex-wrap: wrap;
+  gap: 6px 10px;
   font-size: 8.5px; font-weight: 500;
   color: var(--ink);
   margin-bottom: 18px;
   padding: 7px 12px;
   background: var(--cream);
   border-left: 2px solid var(--gold);
+  word-break: break-word;
+  overflow-wrap: anywhere;
 }
 
-.contact-sep { margin: 0 9px; color: var(--gold); }
+.contact-sep { margin: 0 4px; color: var(--gold); flex-shrink: 0; }
 
 /* ── Section title (una sola línea; sin border + ::after superpuestos) ── */
 h2.sc,
@@ -377,18 +394,105 @@ h2.sc,
 .job.edu-job { margin-bottom: 0; padding-bottom: 0; border-bottom: none; }
 .job.edu-job .jc { margin-bottom: 0; }
 
-/* ══════════════════ RESPONSIVE ══════════════════ */
+/* ══════════════════ RESPONSIVE (móvil / iPhone) ══════════════════ */
 @media (max-width: 720px) {
   .cv {
     flex-direction: column;
-    flex-wrap: wrap;
+    flex-wrap: nowrap;
     max-width: 100%;
   }
   .sb {
     width: 100%;
     min-width: 0;
   }
-  .nm { white-space: normal; }
+  .sb-inner {
+    padding-left: max(16px, env(safe-area-inset-left));
+    padding-right: max(16px, env(safe-area-inset-right));
+  }
+  .mn-inner {
+    padding: max(18px, env(safe-area-inset-top)) max(14px, env(safe-area-inset-right)) 24px max(14px, env(safe-area-inset-left));
+  }
+  h1.nm,
+  .nm {
+    white-space: normal;
+    line-height: 1.12;
+    word-wrap: break-word;
+    overflow-wrap: anywhere;
+    hyphens: auto;
+  }
+  .rl {
+    flex-wrap: wrap;
+  }
+  .rl-txt {
+    white-space: normal;
+    line-height: 1.45;
+    letter-spacing: 0.12em;
+    font-size: clamp(9px, 2.8vw, 10px);
+  }
+  .summary {
+    max-width: none;
+    font-size: clamp(11px, 3.2vw, 13px);
+  }
+  .contact {
+    font-size: clamp(10px, 3vw, 12px);
+    line-height: 1.45;
+  }
+  h2.sc,
+  .sc {
+    letter-spacing: 0.18em;
+    font-size: clamp(9px, 2.4vw, 11px);
+  }
+  .jh {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 4px;
+  }
+  .jt {
+    font-size: clamp(11px, 3.4vw, 13px);
+    width: 100%;
+  }
+  .jd {
+    white-space: normal;
+    font-size: clamp(10px, 2.8vw, 11px);
+  }
+  .jc {
+    font-size: clamp(9px, 2.6vw, 10px);
+  }
+  .job ul li {
+    font-size: clamp(11px, 3.1vw, 13px);
+  }
+  .sl {
+    letter-spacing: 0.18em;
+    font-size: clamp(8px, 2.2vw, 9px);
+  }
+  .ach-t {
+    font-size: clamp(8px, 2.2vw, 9px);
+  }
+  .ach-d {
+    font-size: clamp(11px, 3vw, 12px);
+  }
+  .si {
+    font-size: clamp(11px, 3vw, 12px);
+  }
+  .si.dim,
+  .si.accent {
+    font-size: clamp(10px, 2.8vw, 11px);
+  }
+}
+
+@media (max-width: 380px) {
+  body {
+    padding-left: max(8px, env(safe-area-inset-left));
+    padding-right: max(8px, env(safe-area-inset-right));
+  }
+  .contact .contact-sep {
+    display: none;
+  }
+  .contact {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
 }
 
 /* ══════════════════ PRINT ══════════════════ */
