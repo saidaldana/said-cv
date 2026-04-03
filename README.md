@@ -31,6 +31,12 @@ La identidad de Git para commits en **este** repo ya está configurada localment
 
 `git config user.email "tu@email.com"`
 
+## Vercel / v0 (“No package.json Found”)
+
+Este repo es **solo HTML**; no usa Node para generar el sitio. Igual incluimos un **`package.json` mínimo** para que herramientas como v0 o Vercel reconozcan el proyecto.
+
+En **Vercel** (importar desde GitHub): elige framework **Other**, sin comando de build, o deja que detecte el repo; el sitio sirve `index.html` desde la raíz.
+
 ## Ver en línea (GitHub Pages)
 
 1. En el repositorio: **Settings → Pages**.
@@ -41,6 +47,7 @@ La identidad de Git para commits en **este** repo ya está configurada localment
 ## Archivo principal
 
 - `index.html` — abre este archivo en el navegador para vista previa local.
+- `package.json` — metadatos mínimos (no instala dependencias).
 
 ## Edición local
 

@@ -1,0 +1,6 @@
+{
+  "name": "said-cv",
+  "version": "1.0.0",
+  "private": true,
+  "description": "CV estático en HTML (sin dependencias ni build)"
+}
