@@ -33,35 +33,27 @@
 /* ── Mobile first: documento con scroll y zoom nativos ── */
 html {
   background: #b0ab9f;
-  min-height: 0;
-  height: auto;
-  overflow: auto;
+  min-height: 100vh;
   scroll-padding-top: max(12px, env(safe-area-inset-top));
   -webkit-print-color-adjust: exact;
   print-color-adjust: exact;
-  /* Don't restrict text size adjustment - allow browser zoom */
 }
 
 body {
   font-family: 'DM Sans', sans-serif;
   display: block;
-  min-height: 0;
+  min-height: 100vh;
   padding:
     max(var(--cv-pad), var(--t-pad))
-    max(8px, var(--r-pad))
+    max(12px, var(--r-pad))
     max(var(--cv-pad), var(--b-pad))
-    max(8px, var(--l-pad));
+    max(12px, var(--l-pad));
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  overflow-x: auto;
-  overflow-y: auto;
   width: 100%;
   text-rendering: optimizeLegibility;
   -webkit-tap-highlight-color: rgba(184, 150, 106, 0.25);
-  overscroll-behavior: auto;
   font-feature-settings: "kern" 1, "liga" 1;
-  /* Allow all native gestures - zoom, pan, scroll */
-  touch-action: auto;
 }
 
 @media (prefers-reduced-motion: no-preference) {
@@ -101,7 +93,7 @@ body {
   outline-offset: 3px;
 }
 
-/* Tarjeta CV: columna unica, mismo aspecto general que web */
+/* Tarjeta CV: columna unica en mobile, fila en desktop */
 .cv {
   width: 100%;
   max-width: 816px;
@@ -114,7 +106,7 @@ body {
     0 8px 32px rgba(0, 0, 0, 0.18),
     0 2px 8px rgba(0, 0, 0, 0.08);
   background: var(--white);
-  overflow: hidden;
+  overflow: visible;
   border-radius: 8px;
 }
 
@@ -723,7 +715,6 @@ a.contact-link {
   html { background: white; min-height: 0; }
   body { padding: 0; background: white; min-height: 0; }
   .skip-link { display: none !important; }
-  .cv-controls { display: none !important; }
   .cv-nav { display: none !important; }
   .cv {
     box-shadow: none;
@@ -744,83 +735,7 @@ a.contact-link {
   }
 }
 
-/* ══════════════════ CV VIEWER CONTROLS ══════════════════ */
-.cv-controls {
-  position: fixed;
-  bottom: max(20px, env(safe-area-inset-bottom, 20px));
-  right: max(16px, env(safe-area-inset-right, 16px));
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-  z-index: 1000;
-  opacity: 0;
-  transform: translateY(20px);
-  animation: fadeInUp 0.4s ease 0.5s forwards;
-}
-
-@keyframes fadeInUp {
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-.cv-btn {
-  width: 48px;
-  height: 48px;
-  border: none;
-  border-radius: 50%;
-  background: var(--navy);
-  color: var(--white);
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.25), 0 2px 4px rgba(0, 0, 0, 0.1);
-  transition: transform 0.15s ease, background 0.15s ease, box-shadow 0.15s ease;
-  touch-action: manipulation;
-  -webkit-tap-highlight-color: transparent;
-  user-select: none;
-}
-
-.cv-btn:hover {
-  background: #1e3a5f;
-  transform: scale(1.08);
-  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.3);
-}
-
-.cv-btn:active {
-  transform: scale(0.95);
-}
-
-.cv-btn:focus-visible {
-  outline: 2px solid var(--gold);
-  outline-offset: 3px;
-}
-
-.cv-btn svg {
-  width: 22px;
-  height: 22px;
-  pointer-events: none;
-}
-
-.cv-btn.fit-btn {
-  background: var(--gold);
-  color: var(--navy);
-}
-
-.cv-btn.fit-btn:hover {
-  background: var(--gold2);
-}
-
-.cv-btn.fit-btn.active {
-  background: #2a5a3a;
-  color: var(--white);
-}
-
-
-
-/* Section nav for quick jumping */
+/* ══════════════════ SECTION NAV (DESKTOP ONLY) ══════════════════ */
 .cv-nav {
   position: fixed;
   top: 50%;
@@ -883,87 +798,13 @@ a.contact-link {
   opacity: 1;
 }
 
-/* Mobile: compact controls centered at bottom */
-@media (max-width: 600px) {
+/* Hide nav on mobile */
+@media (max-width: 960px) {
   .cv-nav {
     display: none;
   }
-  
-  .cv-controls {
-    flex-direction: row;
-    bottom: max(16px, env(safe-area-inset-bottom, 16px));
-    right: 50%;
-    transform: translateX(50%) translateY(20px);
-  }
-  
-  @keyframes fadeInUp {
-    to {
-      opacity: 1;
-      transform: translateX(50%) translateY(0);
-    }
-  }
-  
-  .cv-btn {
-    width: 44px;
-    height: 44px;
-  }
 }
 
-/* Fit-to-view mode - scales CV to fit viewport as one-pager */
-body.fit-view {
-  overflow: auto;
-  display: flex;
-  justify-content: center;
-  align-items: flex-start;
-  min-height: 100vh;
-  min-height: 100dvh;
-  padding: 8px;
-  touch-action: auto;
-}
-
-body.fit-view .cv {
-  transform-origin: top center;
-  transition: transform 0.25s ease;
-  flex-shrink: 0;
-  touch-action: auto;
-  /* Ensure CV doesn't overflow when scaled */
-  margin-bottom: 60px;
-}
-
-/* Double-tap hint */
-.tap-hint {
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  background: rgba(21, 40, 64, 0.9);
-  color: var(--white);
-  padding: 16px 24px;
-  border-radius: 12px;
-  font-size: 14px;
-  font-weight: 400;
-  text-align: center;
-  line-height: 1.6;
-  z-index: 2000;
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity 0.3s ease;
-  max-width: 280px;
-}
-
-.tap-hint.visible {
-  opacity: 1;
-}
-
-.tap-hint strong {
-  color: var(--gold);
-}
-
-/* CV should not block any native interactions */
-.cv {
-  touch-action: auto;
-  user-select: auto;
-}
 
 /* Highlight section on navigation */
 .section-highlight {
@@ -1170,22 +1011,7 @@ body.fit-view .cv {
 
 </div>
 
-<!-- CV Viewer Controls - minimal, non-intrusive -->
-<div class="cv-controls" id="cvControls">
-  <button class="cv-btn fit-btn" id="fitBtn" aria-label="Ver CV completo" title="Ver CV completo (F)">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-      <path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"/>
-    </svg>
-  </button>
-  <button class="cv-btn" id="resetBtn" aria-label="Ir al inicio" title="Ir al inicio">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-      <path d="m18 15-6-6-6 6"/>
-      <path d="M12 9v12"/>
-    </svg>
-  </button>
-</div>
-
-<!-- Section Navigation -->
+<!-- Section Navigation - desktop only -->
 <nav class="cv-nav" id="cvNav" aria-label="Navegacion rapida del CV">
   <div class="nav-dot" data-target="top" data-label="Inicio" role="button" tabindex="0"></div>
   <div class="nav-dot" data-target="summary" data-label="Resumen" role="button" tabindex="0"></div>
@@ -1193,106 +1019,19 @@ body.fit-view .cv {
   <div class="nav-dot" data-target="education" data-label="Educacion" role="button" tabindex="0"></div>
 </nav>
 
-
-
-<!-- First Visit Hint -->
-<div class="tap-hint" id="tapHint">
-  <strong>Tip:</strong> Usa pinch para hacer zoom y ver detalles. El boton dorado alterna entre vista completa y normal.
-</div>
-
 <script>
 (function() {
   'use strict';
   
-  // Elements
-  const cv = document.querySelector('.cv');
-  const body = document.body;
-  const fitBtn = document.getElementById('fitBtn');
-  const resetBtn = document.getElementById('resetBtn');
   const navDots = document.querySelectorAll('.nav-dot');
-  const tapHint = document.getElementById('tapHint');
   
-  // State
-  let isFitView = false;
-  const HINT_SHOWN_KEY = 'cv_hint_shown_v2';
-  
-  // Show hint on first visit (mobile only)
-  function showFirstVisitHint() {
-    if (window.innerWidth > 768) return;
-    if (localStorage.getItem(HINT_SHOWN_KEY)) return;
-    
-    setTimeout(() => {
-      tapHint.classList.add('visible');
-      setTimeout(() => {
-        tapHint.classList.remove('visible');
-        localStorage.setItem(HINT_SHOWN_KEY, '1');
-      }, 4000);
-    }, 1500);
-  }
-  
-  // Calculate fit scale to show entire CV
-  function calculateFitScale() {
-    const vw = window.innerWidth;
-    const vh = window.innerHeight;
-    const cvW = cv.offsetWidth;
-    const cvH = cv.offsetHeight;
-    
-    const padding = 32;
-    const scaleX = (vw - padding) / cvW;
-    const scaleY = (vh - padding) / cvH;
-    
-    return Math.min(scaleX, scaleY, 1);
-  }
-  
-  // Toggle fit view - scale CV to fit viewport
-  function toggleFitView() {
-    isFitView = !isFitView;
-    fitBtn.classList.toggle('active', isFitView);
-    body.classList.toggle('fit-view', isFitView);
-    
-    if (isFitView) {
-      const scale = calculateFitScale();
-      cv.style.transform = `scale(${scale})`;
-      cv.style.transformOrigin = 'top center';
-      
-      fitBtn.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-        <path d="M4 14h6m0 0v6m0-6-7 7m17-11h-6m0 0V4m0 6 7-7"/>
-      </svg>`;
-      fitBtn.setAttribute('aria-label', 'Salir de vista completa');
-      fitBtn.setAttribute('title', 'Vista normal');
-      
-      // Scroll to top for best view
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-    } else {
-      cv.style.transform = '';
-      cv.style.transformOrigin = '';
-      
-      fitBtn.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-        <path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"/>
-      </svg>`;
-      fitBtn.setAttribute('aria-label', 'Ver CV completo');
-      fitBtn.setAttribute('title', 'Ver CV completo');
-    }
-  }
-  
-  // Controls
-  fitBtn.addEventListener('click', toggleFitView);
-  
-  resetBtn.addEventListener('click', () => {
-    if (isFitView) toggleFitView();
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  });
-  
-  // Navigation dots - quick jump to sections
+  // Navigation dots - quick jump to sections (desktop only)
   navDots.forEach(dot => {
     const handleNav = () => {
       const targetId = dot.dataset.target;
       const target = document.getElementById(targetId);
       
       if (target) {
-        // Exit fit view for navigation
-        if (isFitView) toggleFitView();
-        
         target.scrollIntoView({ behavior: 'smooth', block: 'start' });
         
         // Visual feedback
@@ -1316,8 +1055,6 @@ body.fit-view .cv {
   
   // Update nav dots on scroll
   function updateActiveNav() {
-    if (isFitView) return; // Don't update in fit view
-    
     const sections = ['education', 'experience', 'summary', 'top'];
     const scrollY = window.scrollY + window.innerHeight / 3;
     
@@ -1344,46 +1081,8 @@ body.fit-view .cv {
     }
   }, { passive: true });
   
-  // Handle window resize for fit view
-  window.addEventListener('resize', () => {
-    if (isFitView) {
-      const scale = calculateFitScale();
-      cv.style.transition = 'none';
-      cv.style.transform = `scale(${scale})`;
-      requestAnimationFrame(() => {
-        cv.style.transition = '';
-      });
-    }
-  }, { passive: true });
-  
-  // Keyboard shortcut - only F for fit toggle, let browser handle zoom
-  document.addEventListener('keydown', (e) => {
-    if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
-    
-    if (e.key === 'f' || e.key === 'F') {
-      // Only if not using Ctrl/Cmd (browser find)
-      if (!e.ctrlKey && !e.metaKey) {
-        e.preventDefault();
-        toggleFitView();
-      }
-    }
-  });
-  
-  // Auto-enable fit view on mobile so CV shows as one-pager
-  function initMobileFitView() {
-    // On mobile/tablet, auto-fit the CV to screen
-    if (window.innerWidth <= 960 && !isFitView) {
-      // Small delay to ensure CV is fully rendered
-      requestAnimationFrame(() => {
-        toggleFitView();
-      });
-    }
-  }
-  
   // Initialize
   updateActiveNav();
-  initMobileFitView();
-  showFirstVisitHint();
 })();
 </script>
 
