@@ -36,6 +36,7 @@ html {
   min-height: 100%;
   min-height: -webkit-fill-available;
   overflow-x: hidden;
+  scroll-padding-top: max(12px, env(safe-area-inset-top));
   -webkit-print-color-adjust: exact;
   print-color-adjust: exact;
   text-size-adjust: 100%;
@@ -62,10 +63,45 @@ body {
   width: 100%;
   text-rendering: optimizeLegibility;
   -webkit-tap-highlight-color: rgba(184, 150, 106, 0.25);
+  overscroll-behavior-x: none;
+  font-feature-settings: "kern" 1, "liga" 1;
 }
 
 @media (prefers-reduced-motion: no-preference) {
   html { scroll-behavior: smooth; }
+}
+
+.skip-link {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+.skip-link:focus {
+  position: fixed;
+  z-index: 10000;
+  left: max(14px, env(safe-area-inset-left));
+  top: max(14px, env(safe-area-inset-top));
+  width: auto;
+  height: auto;
+  margin: 0;
+  clip: auto;
+  overflow: visible;
+  padding: 14px 20px;
+  background: var(--navy);
+  color: var(--white);
+  font-size: 14px;
+  font-weight: 600;
+  text-decoration: none;
+  border-radius: 8px;
+  box-shadow: 0 10px 32px rgba(0, 0, 0, 0.38);
+  outline: 2px solid var(--gold);
+  outline-offset: 3px;
 }
 
 .cv {
@@ -180,13 +216,15 @@ a.contact-link:hover {
   box-sizing: border-box;
   border: 2px solid rgba(26, 51, 79, 0.92);
   image-rendering: auto;
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
 }
 
 /* ── Sidebar label (matches hierarchy: same rhythm as main .sc) ── */
 .sl {
-  font-size: clamp(7px, 1.65vw, 8px);
+  font-size: clamp(7px, 0.18vw + 6.4px, 8px);
   font-weight: 500;
-  letter-spacing: 0.28em;
+  letter-spacing: 0.26em;
   color: var(--gold);
   text-transform: uppercase;
   margin-top: clamp(16px, 3vw, 20px);
@@ -210,7 +248,7 @@ a.contact-link:hover {
 }
 
 .ach-t {
-  font-size: clamp(7.5px, 1.7vw, 8.5px);
+  font-size: clamp(7.5px, 0.2vw + 6.8px, 8.5px);
   font-weight: 500;
   letter-spacing: 0.1em;
   color: var(--gold2);
@@ -219,7 +257,7 @@ a.contact-link:hover {
 }
 
 .ach-d {
-  font-size: clamp(9px, 2.1vw, 10px);
+  font-size: clamp(9px, 0.28vw + 8px, 10px);
   font-weight: 300;
   color: rgba(255,255,255,0.78);
   line-height: 1.55;
@@ -227,7 +265,7 @@ a.contact-link:hover {
 
 /* ── Skill rows ── */
 .si {
-  font-size: clamp(9.5px, 2.2vw, 10.5px);
+  font-size: clamp(9.5px, 0.3vw + 8.5px, 10.5px);
   font-weight: 300;
   color: rgba(255,255,255,0.82);
   padding: 4.5px 0;
@@ -244,9 +282,9 @@ a.contact-link:hover {
 }
 .si.plain { padding: 3px 0; border-bottom: none; }
 .si.plain::before { display: none; }
-.si.dim { color: rgba(255,255,255,0.4); font-size: clamp(8.5px, 2vw, 9px); border-bottom: none; padding: 2px 0; }
+.si.dim { color: rgba(255,255,255,0.4); font-size: clamp(8.5px, 0.25vw + 7.8px, 9px); border-bottom: none; padding: 2px 0; }
 .si.dim::before { display: none; }
-.si.accent { color: var(--gold2); font-size: clamp(8.5px, 2vw, 9px); border-bottom: none; padding: 2px 0; }
+.si.accent { color: var(--gold2); font-size: clamp(8.5px, 0.25vw + 7.8px, 9px); border-bottom: none; padding: 2px 0; }
 .si.accent::before { display: none; }
 
 /* ══════════════════ MAIN ══════════════════ */
@@ -277,12 +315,12 @@ a.contact-link:hover {
 h1.nm,
 .nm {
   font-family: 'Playfair Display', serif;
-  font-size: clamp(20px, 5vw, 26px);
+  font-size: clamp(1.125rem, 0.9vw + 0.85rem, 1.625rem);
   font-weight: 900;
   color: var(--ink);
   letter-spacing: 0.02em;
   text-transform: uppercase;
-  line-height: 1;
+  line-height: 1.08;
   margin: 0 0 5px;
   white-space: nowrap;
 }
@@ -296,8 +334,9 @@ h1.nm,
 }
 
 .rl-txt {
-  font-size: 7.5px; font-weight: 500;
-  letter-spacing: 0.26em;
+  font-size: clamp(9px, 0.38vw + 7px, 11px);
+  font-weight: 500;
+  letter-spacing: 0.22em;
   color: var(--gold);
   text-transform: uppercase;
   white-space: nowrap;
@@ -305,15 +344,15 @@ h1.nm,
 
 /* ── Summary ── */
 .summary {
-  font-size: clamp(9px, 2.1vw, 9.5px);
+  font-size: clamp(10px, 0.32vw + 8.5px, 11px);
   font-weight: 300;
   font-style: italic;
   color: var(--muted);
-  line-height: 1.85;
+  line-height: 1.82;
   margin: 0 0 11px;
   padding-left: 12px;
   border-left: 2px solid var(--gold);
-  max-width: 65ch;
+  max-width: min(65ch, 100%);
 }
 
 /* ── Contact bar ── */
@@ -321,7 +360,8 @@ h1.nm,
   display: flex; align-items: center;
   flex-wrap: wrap;
   gap: 6px 10px;
-  font-size: 8.5px; font-weight: 500;
+  font-size: clamp(9px, 0.28vw + 8px, 10.5px);
+  font-weight: 500;
   color: var(--ink);
   margin-bottom: 18px;
   padding: 7px 12px;
@@ -336,15 +376,15 @@ h1.nm,
 /* ── Section title (una sola línea; sin border + ::after superpuestos) ── */
 h2.sc,
 .sc {
-  font-size: clamp(7px, 1.65vw, 7.5px);
+  font-size: clamp(7.5px, 0.22vw + 6.5px, 8.5px);
   font-weight: 500;
-  letter-spacing: 0.26em;
+  letter-spacing: 0.24em;
   color: var(--navy);
   text-transform: uppercase;
   margin: clamp(16px, 3vw, 18px) 0 clamp(10px, 2vw, 12px);
   padding-bottom: 4px;
   border-bottom: 1.5px solid var(--navy);
-  line-height: 1.25;
+  line-height: 1.3;
 }
 
 /* ── Job entries ── */
@@ -362,20 +402,25 @@ h2.sc,
 }
 
 .jt {
-  font-size: 10.5px; font-weight: 500;
-  color: var(--ink); line-height: 1.25;
+  font-size: clamp(10px, 0.42vw + 8px, 12px);
+  font-weight: 500;
+  color: var(--ink);
+  line-height: 1.28;
   flex: 1;
 }
 
 .jd {
-  font-size: 8px; font-weight: 300;
+  font-size: clamp(8px, 0.22vw + 7px, 9px);
+  font-weight: 300;
   color: var(--muted);
-  white-space: nowrap; flex-shrink: 0;
+  white-space: nowrap;
+  flex-shrink: 0;
   font-style: italic;
 }
 
 .jc {
-  font-size: 7.5px; font-weight: 500;
+  font-size: clamp(7.5px, 0.2vw + 6.5px, 8.5px);
+  font-weight: 500;
   color: var(--gold);
   letter-spacing: 0.06em;
   text-transform: uppercase;
@@ -385,9 +430,10 @@ h2.sc,
 .job ul { list-style: none; }
 
 .job ul li {
-  font-size: 9px; font-weight: 300;
+  font-size: clamp(9px, 0.32vw + 7.5px, 10.5px);
+  font-weight: 300;
   color: var(--text);
-  line-height: 1.65;
+  line-height: 1.68;
   padding-left: 13px;
   position: relative;
   margin-bottom: 3px;
@@ -405,6 +451,24 @@ h2.sc,
 /* ── Education (aligned with .job + .ach patterns) ── */
 .job.edu-job { margin-bottom: 0; padding-bottom: 0; border-bottom: none; }
 .job.edu-job .jc { margin-bottom: 0; }
+
+/* ══════════════════ DESKTOP ≥961px (legibilidad + alta resolución) ══════════════════ */
+@media (min-width: 961px) {
+  .cv {
+    border-radius: 2px;
+    box-shadow:
+      0 20px 60px rgba(0, 0, 0, 0.28),
+      0 1px 0 rgba(255, 255, 255, 0.06) inset;
+  }
+  .mn-inner {
+    padding-left: clamp(26px, 2.5vw, 40px);
+    padding-right: clamp(26px, 2.5vw, 42px);
+  }
+  .sb-inner {
+    padding-left: clamp(18px, 2vw, 22px);
+    padding-right: clamp(18px, 2vw, 22px);
+  }
+}
 
 /* ══════════════════ RESPONSIVE (móvil, tablet, Android, iPhone) ══════════════════ */
 @media (max-width: 960px) {
@@ -556,6 +620,7 @@ h2.sc,
 @media print {
   html { background: white; }
   body { padding: 0; background: white; min-height: 0; }
+  .skip-link { display: none !important; }
   .cv {
     box-shadow: none;
     width: 100%;
@@ -577,10 +642,11 @@ h2.sc,
 </style>
 </head>
 <body>
-<div class="cv">
+<a class="skip-link" href="#main">Saltar al contenido</a>
+<div class="cv" id="top">
 
   <!-- ══ SIDEBAR ══ -->
-  <aside class="sb">
+  <aside class="sb" id="sidebar" aria-label="Professional summary and skills">
     <div class="sb-inner">
 
       <div class="photo-wrap">
@@ -646,15 +712,15 @@ h2.sc,
   </aside>
 
   <!-- ══ MAIN ══ -->
-  <main class="mn">
+  <main class="mn" id="main">
     <div class="mn-inner">
 
-      <h1 class="nm">Said Rodrigo Aldana Sánchez</h1>
+      <h1 class="nm" id="nombre">Said Rodrigo Aldana Sánchez</h1>
       <div class="rl">
         <span class="rl-txt">Senior Product Manager &nbsp;·&nbsp; FinTech &amp; Digital Financial Products</span>
       </div>
 
-      <p class="summary">11+ years at the intersection of financial consulting, data intelligence, and product — a combination most PMs don't have. I lead cross-functional squads from discovery to delivery, applying continuous discovery, evidence-based prioritization, and disciplined experimentation. I mentor PMs, shape product culture, and leverage AI tools to accelerate delivery.</p>
+      <p class="summary" id="summary">11+ years at the intersection of financial consulting, data intelligence, and product — a combination most PMs don't have. I lead cross-functional squads from discovery to delivery, applying continuous discovery, evidence-based prioritization, and disciplined experimentation. I mentor PMs, shape product culture, and leverage AI tools to accelerate delivery.</p>
 
       <div class="contact">
         <a class="contact-link" href="tel:+525554610325">55 5461 0325</a>
@@ -664,7 +730,7 @@ h2.sc,
         Benito Juárez, CDMX
       </div>
 
-      <h2 class="sc">Work Experience</h2>
+      <h2 class="sc" id="experience">Work Experience</h2>
 
       <div class="job">
         <div class="jh">
@@ -751,7 +817,7 @@ h2.sc,
         </ul>
       </div>
 
-      <h2 class="sc">Education</h2>
+      <h2 class="sc" id="education">Education</h2>
       <div class="job edu-job">
         <div class="jh">
           <div class="jt">Industrial Engineering</div>
