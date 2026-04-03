@@ -3,6 +3,9 @@
   "version": "1.0.0",
   "private": true,
   "description": "CV estático — build copia index.html a public/ para Vercel",
+  "engines": {
+    "node": ">=18"
+  },
   "scripts": {
     "dev": "npx --yes serve@14 . -l 3000",
     "build": "node scripts/copy-to-public.mjs",

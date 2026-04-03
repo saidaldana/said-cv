@@ -33,11 +33,19 @@ La identidad de Git para commits en **este** repo ya está configurada localment
 
 ## Vercel (deploy sin errores)
 
-- **Fuente única**: edita `index.html` en la raíz (igual que para GitHub Pages).
-- **`npm run build`**: copia `index.html` → `public/index.html` (script en `scripts/copy-to-public.mjs`).
-- **`vercel.json`**: `outputDirectory` = `public` (compatible con el preset que espera carpeta `public`).
+Archivos que usa el pipeline:
 
-En el panel de Vercel, si lo pregunta: **Framework Preset: Other**, **Build Command** `npm run build`, **Output Directory** `public` (o déjalo en automático si lee `vercel.json`).
+| Archivo | Rol |
+|--------|-----|
+| `vercel.json` | `buildCommand`, `outputDirectory: public`, `framework: null` |
+| `package.json` | `scripts.build` → copia a `public/` |
+| `package-lock.json` | Instalación reproducible en Vercel (`npm ci` / `npm install`) |
+| `scripts/copy-to-public.mjs` | Crea `public/index.html` desde la raíz |
+| `.nvmrc` | Versión de Node en Vercel (20) |
+| `index.html` | **Fuente** del sitio (edita este; GitHub Pages usa la raíz) |
+
+- **`npm run build`**: genera `public/index.html` (la carpeta `public/` está en `.gitignore`).
+- En el dashboard, si hace falta: **Framework: Other**, **Root**: `.`, **Build**: `npm run build`, **Output**: `public` (o automático vía `vercel.json`).
 
 Tras un deploy, **`npm run start`** sirve `public/` como en producción.
 
