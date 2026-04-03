@@ -370,6 +370,11 @@ h1.nm,
 }
 
 .contact-sep { margin: 0 2px; color: var(--gold); flex-shrink: 0; opacity: 0.7; }
+.contact-location { 
+  display: inline-flex;
+  align-items: center;
+  white-space: nowrap;
+}
 
 h2.sc,
 .sc {
@@ -488,7 +493,8 @@ a.contact-link {
     gap: 8px;
     padding: 12px 14px;
   }
-  a.contact-link {
+  a.contact-link,
+  .contact-location {
     width: 100%;
     margin: 0;
     min-height: 48px;
@@ -498,6 +504,9 @@ a.contact-link {
     background: rgba(21, 40, 64, 0.05);
     border-radius: 8px;
     font-size: 0.9rem;
+    display: flex;
+    align-items: center;
+    text-align: center;
   }
   .mn-inner {
     padding: 20px 16px 24px;
@@ -931,7 +940,7 @@ a.contact-link {
         <span class="contact-sep">·</span>
         <a class="contact-link" href="mailto:saidaldana@gmail.com">saidaldana@gmail.com</a>
         <span class="contact-sep">·</span>
-        Benito Juárez, CDMX
+        <span class="contact-location">Benito Juárez, CDMX</span>
       </div>
 
       <h2 class="sc" id="experience">Work Experience</h2>
