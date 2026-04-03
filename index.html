@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=0.25, maximum-scale=5, user-scalable=yes, viewport-fit=cover">
 <meta name="theme-color" content="#152840">
 <meta name="color-scheme" content="light">
 <title>Said Rodrigo Aldana Sánchez — Senior Product Manager</title>
@@ -661,6 +661,8 @@ a.contact-link {
   html { background: white; min-height: 0; }
   body { padding: 0; background: white; min-height: 0; }
   .skip-link { display: none !important; }
+  .cv-controls { display: none !important; }
+  .cv-nav { display: none !important; }
   .cv {
     box-shadow: none;
     width: 100%;
@@ -677,6 +679,266 @@ a.contact-link {
   a.contact-link {
     color: inherit;
     text-decoration: none;
+  }
+}
+
+/* ══════════════════ CV VIEWER CONTROLS ══════════════════ */
+.cv-controls {
+  position: fixed;
+  bottom: max(20px, env(safe-area-inset-bottom, 20px));
+  right: max(16px, env(safe-area-inset-right, 16px));
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  z-index: 1000;
+  opacity: 0;
+  transform: translateY(20px);
+  animation: fadeInUp 0.4s ease 0.5s forwards;
+}
+
+@keyframes fadeInUp {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.cv-btn {
+  width: 48px;
+  height: 48px;
+  border: none;
+  border-radius: 50%;
+  background: var(--navy);
+  color: var(--white);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.25), 0 2px 4px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s ease, background 0.2s ease, box-shadow 0.2s ease;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.cv-btn:hover {
+  background: #1e3a5f;
+  transform: scale(1.08);
+  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.3);
+}
+
+.cv-btn:active {
+  transform: scale(0.95);
+}
+
+.cv-btn:focus-visible {
+  outline: 2px solid var(--gold);
+  outline-offset: 3px;
+}
+
+.cv-btn svg {
+  width: 22px;
+  height: 22px;
+  pointer-events: none;
+}
+
+.cv-btn.fit-btn {
+  background: var(--gold);
+  color: var(--navy);
+}
+
+.cv-btn.fit-btn:hover {
+  background: var(--gold2);
+}
+
+.cv-btn.fit-btn.active {
+  background: #2a5a3a;
+  color: var(--white);
+}
+
+/* Zoom indicator */
+.zoom-indicator {
+  position: fixed;
+  bottom: max(88px, calc(env(safe-area-inset-bottom, 20px) + 68px));
+  right: max(16px, env(safe-area-inset-right, 16px));
+  background: rgba(21, 40, 64, 0.92);
+  color: var(--white);
+  padding: 6px 12px;
+  border-radius: 16px;
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  opacity: 0;
+  transform: translateY(10px);
+  transition: opacity 0.2s ease, transform 0.2s ease;
+  pointer-events: none;
+  z-index: 999;
+}
+
+.zoom-indicator.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Section nav for quick jumping */
+.cv-nav {
+  position: fixed;
+  top: 50%;
+  left: max(8px, env(safe-area-inset-left, 8px));
+  transform: translateY(-50%);
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  z-index: 1000;
+  opacity: 0;
+  animation: fadeInLeft 0.4s ease 0.7s forwards;
+}
+
+@keyframes fadeInLeft {
+  to {
+    opacity: 1;
+  }
+}
+
+.nav-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: rgba(184, 150, 106, 0.4);
+  border: 2px solid transparent;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  position: relative;
+}
+
+.nav-dot:hover {
+  background: var(--gold);
+  transform: scale(1.3);
+}
+
+.nav-dot.active {
+  background: var(--gold);
+  border-color: var(--navy);
+}
+
+.nav-dot::before {
+  content: attr(data-label);
+  position: absolute;
+  left: 18px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: var(--navy);
+  color: var(--white);
+  padding: 4px 10px;
+  border-radius: 4px;
+  font-size: 11px;
+  font-weight: 500;
+  white-space: nowrap;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s ease;
+}
+
+.nav-dot:hover::before {
+  opacity: 1;
+}
+
+/* Mobile: hide nav dots on very small screens, show compact controls */
+@media (max-width: 420px) {
+  .cv-nav {
+    display: none;
+  }
+  
+  .cv-controls {
+    flex-direction: row;
+    bottom: max(12px, env(safe-area-inset-bottom, 12px));
+    right: 50%;
+    transform: translateX(50%) translateY(20px);
+  }
+  
+  @keyframes fadeInUp {
+    to {
+      opacity: 1;
+      transform: translateX(50%) translateY(0);
+    }
+  }
+  
+  .cv-btn {
+    width: 44px;
+    height: 44px;
+  }
+  
+  .zoom-indicator {
+    bottom: max(72px, calc(env(safe-area-inset-bottom, 12px) + 60px));
+    right: 50%;
+    transform: translateX(50%) translateY(10px);
+  }
+  
+  .zoom-indicator.visible {
+    transform: translateX(50%) translateY(0);
+  }
+}
+
+/* Fit-to-view mode */
+body.fit-view {
+  overflow: hidden;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  height: 100dvh;
+  padding: 0;
+}
+
+body.fit-view .cv {
+  transform-origin: center center;
+  transition: transform 0.3s ease;
+}
+
+/* Double-tap hint */
+.tap-hint {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: rgba(21, 40, 64, 0.9);
+  color: var(--white);
+  padding: 16px 24px;
+  border-radius: 12px;
+  font-size: 14px;
+  font-weight: 400;
+  text-align: center;
+  line-height: 1.6;
+  z-index: 2000;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+  max-width: 280px;
+}
+
+.tap-hint.visible {
+  opacity: 1;
+}
+
+.tap-hint strong {
+  color: var(--gold);
+}
+
+/* Smooth scrolling enhancement */
+.cv {
+  scroll-behavior: smooth;
+}
+
+/* Highlight section on navigation */
+.section-highlight {
+  animation: highlightPulse 0.6s ease;
+}
+
+@keyframes highlightPulse {
+  0%, 100% { 
+    box-shadow: none; 
+  }
+  50% { 
+    box-shadow: inset 0 0 0 2px var(--gold); 
   }
 }
 </style>
@@ -870,5 +1132,297 @@ a.contact-link {
   </main>
 
 </div>
+
+<!-- CV Viewer Controls -->
+<div class="cv-controls" id="cvControls">
+  <button class="cv-btn fit-btn" id="fitBtn" aria-label="Ajustar CV a pantalla" title="Vista completa">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"/>
+    </svg>
+  </button>
+  <button class="cv-btn" id="zoomInBtn" aria-label="Acercar" title="Acercar">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35M11 8v6M8 11h6"/>
+    </svg>
+  </button>
+  <button class="cv-btn" id="zoomOutBtn" aria-label="Alejar" title="Alejar">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35M8 11h6"/>
+    </svg>
+  </button>
+  <button class="cv-btn" id="resetBtn" aria-label="Restablecer zoom" title="Restablecer (100%)">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/>
+      <path d="M3 3v5h5"/>
+    </svg>
+  </button>
+</div>
+
+<!-- Section Navigation -->
+<nav class="cv-nav" id="cvNav" aria-label="Navegacion rapida del CV">
+  <div class="nav-dot" data-target="top" data-label="Inicio" role="button" tabindex="0"></div>
+  <div class="nav-dot" data-target="summary" data-label="Resumen" role="button" tabindex="0"></div>
+  <div class="nav-dot" data-target="experience" data-label="Experiencia" role="button" tabindex="0"></div>
+  <div class="nav-dot" data-target="education" data-label="Educacion" role="button" tabindex="0"></div>
+</nav>
+
+<!-- Zoom Indicator -->
+<div class="zoom-indicator" id="zoomIndicator">100%</div>
+
+<!-- First Visit Hint -->
+<div class="tap-hint" id="tapHint">
+  <strong>Tip:</strong> Usa los controles para hacer zoom o <strong>doble tap</strong> para ajustar el CV a tu pantalla
+</div>
+
+<script>
+(function() {
+  'use strict';
+  
+  // Elements
+  const cv = document.querySelector('.cv');
+  const body = document.body;
+  const fitBtn = document.getElementById('fitBtn');
+  const zoomInBtn = document.getElementById('zoomInBtn');
+  const zoomOutBtn = document.getElementById('zoomOutBtn');
+  const resetBtn = document.getElementById('resetBtn');
+  const zoomIndicator = document.getElementById('zoomIndicator');
+  const navDots = document.querySelectorAll('.nav-dot');
+  const tapHint = document.getElementById('tapHint');
+  
+  // State
+  let currentZoom = 1;
+  let isFitView = false;
+  let zoomTimeout = null;
+  let lastTap = 0;
+  const HINT_SHOWN_KEY = 'cv_hint_shown';
+  
+  // Show hint on first visit (mobile only)
+  function showFirstVisitHint() {
+    if (window.innerWidth > 768) return;
+    if (localStorage.getItem(HINT_SHOWN_KEY)) return;
+    
+    setTimeout(() => {
+      tapHint.classList.add('visible');
+      setTimeout(() => {
+        tapHint.classList.remove('visible');
+        localStorage.setItem(HINT_SHOWN_KEY, '1');
+      }, 4000);
+    }, 1500);
+  }
+  
+  // Update zoom indicator
+  function showZoomIndicator(zoom) {
+    const percent = Math.round(zoom * 100);
+    zoomIndicator.textContent = percent + '%';
+    zoomIndicator.classList.add('visible');
+    
+    clearTimeout(zoomTimeout);
+    zoomTimeout = setTimeout(() => {
+      zoomIndicator.classList.remove('visible');
+    }, 1500);
+  }
+  
+  // Calculate fit scale
+  function calculateFitScale() {
+    const vw = window.innerWidth;
+    const vh = window.innerHeight;
+    const cvRect = cv.getBoundingClientRect();
+    const cvW = cv.scrollWidth / currentZoom;
+    const cvH = cv.scrollHeight / currentZoom;
+    
+    const padding = window.innerWidth < 420 ? 16 : 32;
+    const scaleX = (vw - padding) / cvW;
+    const scaleY = (vh - padding) / cvH;
+    
+    return Math.min(scaleX, scaleY, 1);
+  }
+  
+  // Apply zoom
+  function applyZoom(zoom, smooth = true) {
+    currentZoom = Math.max(0.25, Math.min(5, zoom));
+    
+    if (smooth) {
+      cv.style.transition = 'transform 0.3s ease';
+    } else {
+      cv.style.transition = 'none';
+    }
+    
+    if (isFitView) {
+      const fitScale = calculateFitScale();
+      cv.style.transform = `scale(${fitScale})`;
+      showZoomIndicator(fitScale);
+    } else {
+      cv.style.transform = currentZoom === 1 ? '' : `scale(${currentZoom})`;
+      showZoomIndicator(currentZoom);
+    }
+    
+    // Reset transition
+    if (!smooth) {
+      requestAnimationFrame(() => {
+        cv.style.transition = '';
+      });
+    }
+  }
+  
+  // Toggle fit view
+  function toggleFitView() {
+    isFitView = !isFitView;
+    fitBtn.classList.toggle('active', isFitView);
+    body.classList.toggle('fit-view', isFitView);
+    
+    if (isFitView) {
+      fitBtn.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M4 14h6m0 0v6m0-6-7 7m17-11h-6m0 0V4m0 6 7-7"/>
+      </svg>`;
+      fitBtn.setAttribute('aria-label', 'Salir de vista completa');
+      applyZoom(currentZoom);
+    } else {
+      fitBtn.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"/>
+      </svg>`;
+      fitBtn.setAttribute('aria-label', 'Ajustar CV a pantalla');
+      cv.style.transform = '';
+      currentZoom = 1;
+      showZoomIndicator(1);
+    }
+  }
+  
+  // Zoom controls
+  fitBtn.addEventListener('click', toggleFitView);
+  
+  zoomInBtn.addEventListener('click', () => {
+    if (isFitView) toggleFitView();
+    applyZoom(currentZoom * 1.25);
+  });
+  
+  zoomOutBtn.addEventListener('click', () => {
+    if (isFitView) toggleFitView();
+    applyZoom(currentZoom / 1.25);
+  });
+  
+  resetBtn.addEventListener('click', () => {
+    if (isFitView) toggleFitView();
+    currentZoom = 1;
+    cv.style.transform = '';
+    showZoomIndicator(1);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
+  
+  // Double tap to toggle fit view (mobile)
+  cv.addEventListener('touchend', (e) => {
+    const now = Date.now();
+    const DOUBLE_TAP_DELAY = 300;
+    
+    if (now - lastTap < DOUBLE_TAP_DELAY) {
+      e.preventDefault();
+      toggleFitView();
+    }
+    lastTap = now;
+  });
+  
+  // Navigation dots
+  navDots.forEach(dot => {
+    const handleNav = () => {
+      const targetId = dot.dataset.target;
+      const target = document.getElementById(targetId);
+      
+      if (target) {
+        // Exit fit view for navigation
+        if (isFitView) toggleFitView();
+        
+        target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        
+        // Visual feedback
+        target.classList.add('section-highlight');
+        setTimeout(() => target.classList.remove('section-highlight'), 600);
+        
+        // Update active state
+        navDots.forEach(d => d.classList.remove('active'));
+        dot.classList.add('active');
+      }
+    };
+    
+    dot.addEventListener('click', handleNav);
+    dot.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        handleNav();
+      }
+    });
+  });
+  
+  // Update nav dots on scroll
+  function updateActiveNav() {
+    const sections = ['education', 'experience', 'summary', 'top'];
+    const scrollY = window.scrollY + window.innerHeight / 3;
+    
+    for (const id of sections) {
+      const el = document.getElementById(id);
+      if (el && el.offsetTop <= scrollY) {
+        navDots.forEach(d => {
+          d.classList.toggle('active', d.dataset.target === id);
+        });
+        break;
+      }
+    }
+  }
+  
+  // Throttled scroll listener
+  let scrollTicking = false;
+  window.addEventListener('scroll', () => {
+    if (!scrollTicking) {
+      requestAnimationFrame(() => {
+        updateActiveNav();
+        scrollTicking = false;
+      });
+      scrollTicking = true;
+    }
+  });
+  
+  // Handle window resize for fit view
+  window.addEventListener('resize', () => {
+    if (isFitView) {
+      applyZoom(currentZoom, false);
+    }
+  });
+  
+  // Keyboard shortcuts
+  document.addEventListener('keydown', (e) => {
+    // Ignore if typing in an input
+    if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+    
+    switch(e.key) {
+      case '+':
+      case '=':
+        e.preventDefault();
+        if (isFitView) toggleFitView();
+        applyZoom(currentZoom * 1.25);
+        break;
+      case '-':
+        e.preventDefault();
+        if (isFitView) toggleFitView();
+        applyZoom(currentZoom / 1.25);
+        break;
+      case '0':
+        e.preventDefault();
+        if (isFitView) toggleFitView();
+        currentZoom = 1;
+        cv.style.transform = '';
+        showZoomIndicator(1);
+        break;
+      case 'f':
+      case 'F':
+        e.preventDefault();
+        toggleFitView();
+        break;
+    }
+  });
+  
+  // Initialize
+  updateActiveNav();
+  showFirstVisitHint();
+})();
+</script>
+
 </body>
 </html>
