@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, interactive-widget=resizes-content">
 <meta name="theme-color" content="#152840">
 <meta name="color-scheme" content="light">
 <title>Said Rodrigo Aldana Sánchez — Senior Product Manager</title>
@@ -34,6 +34,7 @@
 html {
   background: #b0ab9f;
   min-height: 100%;
+  min-height: -webkit-fill-available;
   overflow-x: hidden;
   -webkit-print-color-adjust: exact;
   print-color-adjust: exact;
@@ -47,6 +48,7 @@ body {
   justify-content: center;
   align-items: flex-start;
   min-height: 100vh;
+  min-height: -webkit-fill-available;
   min-height: 100dvh;
   min-height: 100svh;
   padding:
@@ -58,6 +60,12 @@ body {
   -moz-osx-font-smoothing: grayscale;
   overflow-x: hidden;
   width: 100%;
+  text-rendering: optimizeLegibility;
+  -webkit-tap-highlight-color: rgba(184, 150, 106, 0.25);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  html { scroll-behavior: smooth; }
 }
 
 .cv {
@@ -81,6 +89,7 @@ a:focus-visible {
 a.contact-link {
   color: inherit;
   text-decoration: none;
+  touch-action: manipulation;
 }
 a.contact-link:hover {
   color: var(--navy);
@@ -259,6 +268,9 @@ a.contact-link:hover {
 
 .mn-inner {
   padding: clamp(24px, 4vw, 34px) clamp(22px, 4vw, 36px) clamp(26px, 4vw, 32px) clamp(24px, 4vw, 32px);
+  min-width: 0;
+  overflow-wrap: anywhere;
+  word-wrap: break-word;
 }
 
 /* ── Name block ── */
@@ -394,93 +406,125 @@ h2.sc,
 .job.edu-job { margin-bottom: 0; padding-bottom: 0; border-bottom: none; }
 .job.edu-job .jc { margin-bottom: 0; }
 
-/* ══════════════════ RESPONSIVE (móvil / iPhone) ══════════════════ */
-@media (max-width: 720px) {
+/* ══════════════════ RESPONSIVE (móvil, tablet, Android, iPhone) ══════════════════ */
+@media (max-width: 960px) {
   .cv {
     flex-direction: column;
     flex-wrap: nowrap;
     max-width: 100%;
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.22);
   }
   .sb {
     width: 100%;
     min-width: 0;
+    max-width: 100%;
   }
   .sb-inner {
+    max-width: 100%;
     padding-left: max(16px, env(safe-area-inset-left));
     padding-right: max(16px, env(safe-area-inset-right));
+    padding-bottom: max(28px, env(safe-area-inset-bottom));
   }
   .mn-inner {
-    padding: max(18px, env(safe-area-inset-top)) max(14px, env(safe-area-inset-right)) 24px max(14px, env(safe-area-inset-left));
+    padding:
+      max(20px, env(safe-area-inset-top))
+      max(16px, env(safe-area-inset-right))
+      max(28px, env(safe-area-inset-bottom))
+      max(16px, env(safe-area-inset-left));
+  }
+  .photo-wrap {
+    margin-top: max(4px, env(safe-area-inset-top));
+  }
+  .photo-ring {
+    width: min(128px, 38vmin);
+    height: min(128px, 38vmin);
   }
   h1.nm,
   .nm {
     white-space: normal;
-    line-height: 1.12;
+    line-height: 1.15;
     word-wrap: break-word;
     overflow-wrap: anywhere;
     hyphens: auto;
+    font-size: clamp(1.125rem, 5.2vmin, 1.625rem);
   }
   .rl {
     flex-wrap: wrap;
   }
   .rl-txt {
     white-space: normal;
-    line-height: 1.45;
-    letter-spacing: 0.12em;
-    font-size: clamp(9px, 2.8vw, 10px);
+    line-height: 1.5;
+    letter-spacing: 0.1em;
+    font-size: clamp(0.65rem, 2.9vmin, 0.7rem);
   }
   .summary {
     max-width: none;
-    font-size: clamp(11px, 3.2vw, 13px);
+    font-size: clamp(0.8rem, 3.4vmin, 0.95rem);
+    line-height: 1.75;
   }
   .contact {
-    font-size: clamp(10px, 3vw, 12px);
-    line-height: 1.45;
+    font-size: clamp(0.8rem, 3.1vmin, 0.9rem);
+    line-height: 1.5;
+    padding: 12px 14px;
+    gap: 8px 12px;
+  }
+  a.contact-link {
+    min-height: 44px;
+    padding: 8px 4px;
+    margin: -8px -4px;
+    display: inline-flex;
+    align-items: center;
+    border-radius: 4px;
   }
   h2.sc,
   .sc {
-    letter-spacing: 0.18em;
-    font-size: clamp(9px, 2.4vw, 11px);
+    letter-spacing: 0.16em;
+    font-size: clamp(0.65rem, 2.6vmin, 0.75rem);
   }
   .jh {
     flex-direction: column;
     align-items: flex-start;
-    gap: 4px;
+    gap: 6px;
   }
   .jt {
-    font-size: clamp(11px, 3.4vw, 13px);
+    font-size: clamp(0.85rem, 3.6vmin, 0.95rem);
     width: 100%;
+    line-height: 1.35;
   }
   .jd {
     white-space: normal;
-    font-size: clamp(10px, 2.8vw, 11px);
+    font-size: clamp(0.75rem, 3vmin, 0.85rem);
   }
   .jc {
-    font-size: clamp(9px, 2.6vw, 10px);
+    font-size: clamp(0.68rem, 2.7vmin, 0.75rem);
+    line-height: 1.35;
   }
   .job ul li {
-    font-size: clamp(11px, 3.1vw, 13px);
+    font-size: clamp(0.82rem, 3.3vmin, 0.92rem);
+    line-height: 1.65;
   }
   .sl {
-    letter-spacing: 0.18em;
-    font-size: clamp(8px, 2.2vw, 9px);
+    letter-spacing: 0.16em;
+    font-size: clamp(0.65rem, 2.5vmin, 0.72rem);
   }
   .ach-t {
-    font-size: clamp(8px, 2.2vw, 9px);
+    font-size: clamp(0.65rem, 2.5vmin, 0.72rem);
   }
   .ach-d {
-    font-size: clamp(11px, 3vw, 12px);
+    font-size: clamp(0.8rem, 3.1vmin, 0.88rem);
   }
   .si {
-    font-size: clamp(11px, 3vw, 12px);
+    font-size: clamp(0.82rem, 3.1vmin, 0.9rem);
+    padding: 7px 0;
+    align-items: center;
   }
   .si.dim,
   .si.accent {
-    font-size: clamp(10px, 2.8vw, 11px);
+    font-size: clamp(0.78rem, 2.9vmin, 0.85rem);
   }
 }
 
-@media (max-width: 380px) {
+@media (max-width: 420px) {
   body {
     padding-left: max(8px, env(safe-area-inset-left));
     padding-right: max(8px, env(safe-area-inset-right));
@@ -490,8 +534,16 @@ h2.sc,
   }
   .contact {
     flex-direction: column;
-    align-items: flex-start;
-    gap: 8px;
+    align-items: stretch;
+    gap: 10px;
+  }
+  a.contact-link {
+    width: 100%;
+    margin: 0;
+    min-height: 48px;
+    padding: 10px 8px;
+    justify-content: center;
+    box-sizing: border-box;
   }
 }
 
