@@ -106,7 +106,7 @@ body {
     0 8px 32px rgba(0, 0, 0, 0.18),
     0 2px 8px rgba(0, 0, 0, 0.08);
   background: var(--white);
-  overflow: visible;
+  overflow: hidden;
   border-radius: 8px;
 }
 
@@ -139,6 +139,8 @@ a.contact-link:hover {
   flex-direction: column;
   -webkit-print-color-adjust: exact;
   print-color-adjust: exact;
+  /* Mobile: rounded top corners */
+  border-radius: 8px 8px 0 0;
 }
 
 .sb::before {
@@ -284,6 +286,8 @@ a.contact-link:hover {
   min-width: 0;
   background: var(--white);
   position: relative;
+  /* Mobile: rounded bottom corners */
+  border-radius: 0 0 8px 8px;
 }
 
 .mn::before {
@@ -548,6 +552,11 @@ a.contact-link {
     width: var(--sw);
     min-width: var(--sw);
     max-width: 100%;
+    border-radius: 2px 0 0 2px;
+  }
+  
+  .mn {
+    border-radius: 0 2px 2px 0;
   }
 
   .sb-inner {
