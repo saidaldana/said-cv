@@ -909,7 +909,7 @@ a.contact-link {
   }
 }
 
-/* Fit-to-view mode - scales CV to fit viewport while keeping native interactions */
+/* Fit-to-view mode - scales CV to fit viewport as one-pager */
 body.fit-view {
   overflow: auto;
   display: flex;
@@ -917,7 +917,7 @@ body.fit-view {
   align-items: flex-start;
   min-height: 100vh;
   min-height: 100dvh;
-  padding: 16px;
+  padding: 8px;
   touch-action: auto;
 }
 
@@ -925,8 +925,9 @@ body.fit-view .cv {
   transform-origin: top center;
   transition: transform 0.25s ease;
   flex-shrink: 0;
-  /* Native interactions still work on scaled element */
   touch-action: auto;
+  /* Ensure CV doesn't overflow when scaled */
+  margin-bottom: 60px;
 }
 
 /* Double-tap hint */
@@ -1196,7 +1197,7 @@ body.fit-view .cv {
 
 <!-- First Visit Hint -->
 <div class="tap-hint" id="tapHint">
-  <strong>Tip:</strong> Usa pinch o scroll del mouse para hacer zoom. El boton dorado muestra el CV completo.
+  <strong>Tip:</strong> Usa pinch para hacer zoom y ver detalles. El boton dorado alterna entre vista completa y normal.
 </div>
 
 <script>
@@ -1368,8 +1369,20 @@ body.fit-view .cv {
     }
   });
   
+  // Auto-enable fit view on mobile so CV shows as one-pager
+  function initMobileFitView() {
+    // On mobile/tablet, auto-fit the CV to screen
+    if (window.innerWidth <= 960 && !isFitView) {
+      // Small delay to ensure CV is fully rendered
+      requestAnimationFrame(() => {
+        toggleFitView();
+      });
+    }
+  }
+  
   // Initialize
   updateActiveNav();
+  initMobileFitView();
   showFirstVisitHint();
 })();
 </script>
