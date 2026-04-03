@@ -2,3 +2,6 @@
 Thumbs.db
 desktop.ini
 *.log
+
+# Generado por npm run build (Vercel); la fuente es /index.html
+/public

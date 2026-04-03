@@ -2,10 +2,10 @@
   "name": "said-cv",
   "version": "1.0.0",
   "private": true,
-  "description": "CV estático en HTML (sin dependencias ni build)",
+  "description": "CV estático — build copia index.html a public/ para Vercel",
   "scripts": {
     "dev": "npx --yes serve@14 . -l 3000",
-    "build": "node -e \"process.exit(0)\"",
-    "start": "npx --yes serve@14 . -l 3000"
+    "build": "node scripts/copy-to-public.mjs",
+    "start": "npx --yes serve@14 public -l 3000"
   }
 }

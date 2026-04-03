@@ -31,14 +31,15 @@ La identidad de Git para commits en **este** repo ya está configurada localment
 
 `git config user.email "tu@email.com"`
 
-## Vercel / v0 (preview y deploy)
+## Vercel (deploy sin errores)
 
-Este repo es **solo HTML**. El `package.json` incluye:
+- **Fuente única**: edita `index.html` en la raíz (igual que para GitHub Pages).
+- **`npm run build`**: copia `index.html` → `public/index.html` (script en `scripts/copy-to-public.mjs`).
+- **`vercel.json`**: `outputDirectory` = `public` (compatible con el preset que espera carpeta `public`).
 
-- **`npm run dev`** — sirve la carpeta en el puerto 3000 (v0 pide un script `dev` para la vista previa).
-- **`npm run build`** — no genera nada; solo termina bien para entornos que exigen un script `build`.
+En el panel de Vercel, si lo pregunta: **Framework Preset: Other**, **Build Command** `npm run build`, **Output Directory** `public` (o déjalo en automático si lee `vercel.json`).
 
-En **Vercel** (importar desde GitHub): framework **Other** o **Vite** no aplica; si pide comando de build, usa `npm run build` o déjalo vacío si permite sitio estático desde la raíz (`index.html`).
+Tras un deploy, **`npm run start`** sirve `public/` como en producción.
 
 ## Ver en línea (GitHub Pages)
 
@@ -50,7 +51,8 @@ En **Vercel** (importar desde GitHub): framework **Other** o **Vite** no aplica;
 ## Archivo principal
 
 - `index.html` — abre este archivo en el navegador para vista previa local.
-- `package.json` — metadatos mínimos (no instala dependencias).
+- `package.json` — scripts `dev`, `build`, `start`.
+- `public/` — generado por `npm run build` (ignorado en git); no edites ahí.
 
 ## Edición local
 
